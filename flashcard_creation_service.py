@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 import pandas as pd
+from flask_cors import CORS
 import os
+import csv
 
 app = Flask(__name__)
-
+CORS(app)
 # In-memory storage for flashcards
 flashcards = pd.DataFrame(columns=['question', 'answer'])
 
@@ -43,11 +45,11 @@ def upload_flashcards():
 
 
 # Endpoint to manually add a single flashcard
-@app_creation.route('/add_flashcard', methods=['POST'])
+@app.route('/add_flashcard', methods=['POST'])
 def add_flashcard():
     try:
-        question = request.json.get('question')
-        answer = request.json.get('answer')
+        question = request.form.get('question')
+        answer = request.form.get('answer')
 
         if not question or not answer:
             return jsonify({"error": "Both 'question' and 'answer' are required"}), 400
