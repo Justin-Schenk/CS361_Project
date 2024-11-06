@@ -1,13 +1,5 @@
 from flask import Flask, request, jsonify
 import pandas as pd
-
-app = Flask(__name__)
-
-# In-memory storage for flashcards
-flashcards = pd.DataFrame(columns=['question', 'answer'])
-
-from flask import Flask, request, jsonify
-import pandas as pd
 import os
 
 app = Flask(__name__)
@@ -32,8 +24,11 @@ def upload_flashcards():
         if not file.filename.endswith('.csv'):
             return jsonify({"error": "File must be a CSV"}), 400
 
-        # Read the CSV file into a DataFrame
-        new_flashcards = pd.read_csv(file)
+        try:
+            # Read the CSV file into a DataFrame
+            new_flashcards = pd.read_csv(file)
+        except pd.errors.ParserError as e:
+            return jsonify({"error": f"Failed to parse CSV file: {e}"}), 400
 
         # Validate that it has the required columns
         if not all(column in new_flashcards.columns for column in ['question', 'answer']):
@@ -48,7 +43,7 @@ def upload_flashcards():
 
 
 # Endpoint to manually add a single flashcard
-@app.route('/add_flashcard', methods=['POST'])
+@app_creation.route('/add_flashcard', methods=['POST'])
 def add_flashcard():
     try:
         question = request.json.get('question')
@@ -60,6 +55,11 @@ def add_flashcard():
         global flashcards
         new_flashcard = pd.DataFrame([{'question': question, 'answer': answer}])
         flashcards = pd.concat([flashcards, new_flashcard], ignore_index=True)
+
+        # Append the new flashcard to the CSV file
+        with open('flashcards.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([question, answer])
 
         return jsonify({"message": "Flashcard added successfully"}), 200
     except Exception as e:
