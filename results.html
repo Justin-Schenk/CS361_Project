@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Results</title>
+</head>
+<body>
+    <h1>Review Session Results</h1>
+    <div id="resultsSection">
+        <p>Total Questions Answered: <span id="totalQuestions"></span></p>
+        <p>Correct Answers: <span id="correctAnswers"></span></p>
+    </div>
+    <button onclick="window.location.href='http://localhost:5000/'">Back to Home</button>
+
+    <script>
+        // Fetch results from the backend service
+        fetch('http://localhost:5002/end_review')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalQuestions').innerText = data.total;
+                document.getElementById('correctAnswers').innerText = data.correct;
+            })
+            .catch(error => alert('Error fetching results: ' + error));
+    </script>
+</body>
+</html>

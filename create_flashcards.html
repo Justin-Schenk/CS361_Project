@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Flashcards</title>
+</head>
+<body>
+    <h1>Create or Upload Flashcards</h1>
+    <button onclick="window.location.href='http://localhost:5000/'">Back to Home</button>
+
+    <!-- Form to upload CSV -->
+    <h2>Upload Flashcards from CSV</h2>
+    <form id="uploadForm">
+        <input type="file" id="csvFile" name="file" accept=".csv">
+        <button type="button" onclick="uploadCSV()">Upload CSV</button>
+    </form>
+
+    <!-- Form to add a flashcard -->
+    <h2>Add a Flashcard</h2>
+    <form id="addFlashcardForm">
+        <label>Question:</label>
+        <input type="text" id="question" required>
+        <label>Answer:</label>
+        <input type="text" id="answer" required>
+        <button type="button" onclick="addFlashcard()">Add Flashcard</button>
+    </form>
+
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Flashcards</title>
+</head>
+<body>
+    <h1>Review Flashcards</h1>
+    <button onclick="window.location.href='index.html'">Back to Home</button>
+
+    <!-- Flashcard Review Section -->
+    <h2>Flashcard Review</h2>
+    <div id="reviewSection" style="display: block;">
+        <div id="flashcardBox" onclick="fetch('http://localhost:5002/review/next').then(response => response.json()).then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('flashcardQuestion').innerText = data.question;
+                    document.getElementById('flashcardAnswer').style.display = 'none';
+                }
+            }).catch(error => alert('Error: ' + error));" style="border: 2px solid black; padding: 20px; width: 300px; height: 150px; cursor: pointer;">
+            <p id="flashcardQuestion">Click here to get a question</p>
+            <p id="flashcardAnswer" style="display: none;"></p>
+        </div>
+        <br>
+        <label>Did you answer correctly?</label>
+        <button onclick="fetch('http://localhost:5002/review/submit', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ correct: true })}).then(response => response.json()).then(data => alert(data.message)).catch(error => alert('Error: ' + error));">Yes</button>
+        <button onclick="fetch('http://localhost:5002/review/submit', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ correct: false })}).then(response => response.json()).then(data => alert(data.message)).catch(error => alert('Error: ' + error));">No</button>
+        <button onclick="const word = document.getElementById('flashcardQuestion').innerText; fetch('http://localhost:5003/delete_flashcard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word })}).then(response => response.json()).then(data => alert(data.message)).catch(error => alert('Error: ' + error));">Delete This Flashcard</button>
+    </div>
+
+    <!-- End review button -->
+    <h2>End Review Session</h2>
+    <button onclick="window.location.href = 'results.html';">End Review and View Results</button>
+
+
+</body>
+</html>

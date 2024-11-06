@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+</head>
+<body>
+    <h1>Settings</h1>
+    <button onclick="window.location.href='index.html'">Back to Home</button>
+
+    <!-- Button to delete all flashcards -->
+    <h2>Delete All Flashcards</h2>
+    <button onclick="fetch('http://localhost:5003/delete_flashcard', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ word: 'all' })}).then(response => response.json()).then(data => alert(data.message)).catch(error => alert('Error: ' + error));">Delete All Flashcards</button>
+
+    <!-- Button to shuffle flashcards -->
+    <h2>Shuffle Flashcards</h2>
+    <button onclick="fetch('http://localhost:5004/shuffle_flashcards', {method: 'POST'}).then(response => response.json()).then(data => alert(data.message)).catch(error => alert('Error: ' + error));">Shuffle Flashcards</button>
+
+
+</body>
+</html>
